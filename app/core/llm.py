@@ -13,7 +13,7 @@ class GeminiLLM:
             You are a knowledgeable assistant. Use ONLY the following context to answer the question.
 
             Context:
-            {''.join(f"- {doc}\n" for doc in context)}
+            {context}
 
             Question:
             {prompt}
