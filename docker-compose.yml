@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  chromadb:
+    image: chromadb/chroma:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - CHROMA_SERVER_AUTH_CREDENTIALS=admin:admin  # Remove if not using auth
+      - CHROMA_SERVER_AUTH_PROVIDER=chromadb.auth.token.TokenAuthServerProvider
+      - CHROMA_SERVER_AUTH_TOKEN_TRANSPORT_HEADER=chroma-token
+      - CHROMA_SERVER_CORS_ALLOW_ORIGINS=*
+    volumes:
+      - chroma_data:/chroma/chroma
+    networks:
+      - rag-network
+
+  rag-api:
+    build: .
+    ports:
+      - "8001:8001"
+    environment:
+      - CHROMA_HOST=chromadb
+      - CHROMA_PORT=8000
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_MODEL=${GEMINI_MODEL}
+      - EMBEDDING_MODEL=${EMBEDDING_MODEL}
+      - CHUNK_SIZE=${CHUNK_SIZE}
+      - CHUNK_OVERLAP=${CHUNK_OVERLAP}
+      - MAX_DOCUMENTS=${MAX_DOCUMENTS}
+      - MAX_PAGES=${MAX_PAGES}
+    depends_on:
+      - chromadb
+    networks:
+      - rag-network
+
+volumes:
+  chroma_data:
+
+networks:
+  rag-network:
+    driver: bridge
