@@ -19,10 +19,8 @@ async def process_query(request: QueryRequest,
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/metadata", response_model=MetadataResponse)
-async def get_query_metadata(
-    service: QueryService = Depends()
-):
+@router.get("/metadata", response_model=MetadataResponse)
+async def get_query_metadata():
     try:
         
         hits = latest_relevant_chunks

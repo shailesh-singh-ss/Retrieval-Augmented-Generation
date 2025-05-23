@@ -20,7 +20,7 @@ app.add_middleware(
 # Include routers
 app.include_router(documents_router, prefix="/api/v1/documents", tags=["documents"])
 app.include_router(queries_router, prefix="/api/v1/query", tags=["queries"])
-app.include_router(health_router, prefix="/health", tags=["health"])
+app.include_router(health_router, prefix="/api/v1/health", tags=["health"])
 
 @app.on_event("startup")
 async def on_startup():
